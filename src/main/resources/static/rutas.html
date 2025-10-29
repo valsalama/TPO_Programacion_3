@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barrios de la Ciudad</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Rutas de la Ciudad</title>
+    <link rel="stylesheet" href="rutas.css">
 </head>
 <body>
     <header>
@@ -34,15 +34,21 @@
     </header>
 
     <main>
-        <h1>Bienvenido a los Barrios de la Ciudad</h1>
-        <p>
-            En esta sección podés explorar los diferentes barrios de nuestra ciudad, conocer su historia,
-            sus características principales y descubrir qué los hace únicos.
-        </p>
-        <p>
-            Utilizá el menú superior para navegar entre los barrios, rutas, eventos públicos,
-            personal o explorar puntos de interés cercanos.
-        </p>
+        <h1>Buscar la ruta mínima entre barrios</h1>
+        <form id="ruta-form">
+            <label for="origen">Barrio de origen:</label>
+            <select id="origen" name="origen" required>
+            </select>
+
+            <label for="destino">Barrio de destino:</label>
+            <select id="destino" name="destino" required>
+            </select>
+
+            <button type="submit">Buscar ruta mínima</button>
+        </form>
+
+        <div id="resultado">
+        </div>
     </main>
 
     <footer>

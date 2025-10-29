@@ -1,0 +1,108 @@
+/* Contenedor general para mantener footer al fondo */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* altura mínima = ventana */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Encabezado y menú */
+header {
+    background-color: #004b8d;
+    color: white;
+    padding: 15px 0;
+    z-index: 100;
+}
+
+/* Navegación principal */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    position: relative;
+}
+
+nav a:hover {
+    background-color: #006dcc;
+    border-radius: 5px;
+}
+
+.submenu {
+    position: relative;
+}
+
+.submenu-content {
+    display: none;
+    position: absolute;
+    background-color: #004b8d;
+    min-width: 180px;
+    top: 100%;
+    left: 0;
+    border-radius: 5px;
+    z-index: 200;
+    padding-top: 5px; 
+}
+
+.submenu-content a {
+    display: block;
+    padding: 10px;
+    color: white;
+}
+
+.submenu-content a:hover {
+    background-color: #006dcc;
+}
+
+.submenu:hover > .submenu-content,
+.submenu-content:hover {
+    display: block;
+}
+
+.submenu > a::after {
+    content: " ▾";
+    font-size: 0.8em;
+}
+
+main {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+}
+
+h1 {
+    color: #004b8d;
+}
+
+p {
+    color: #333;
+    max-width: 700px;
+    margin: 20px auto;
+    line-height: 1.6;
+}
+
+footer {
+    background-color: #004b8d;
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+}
+
+footer a {
+    color: #ffd700; 
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
