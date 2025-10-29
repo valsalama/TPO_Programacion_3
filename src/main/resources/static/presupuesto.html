@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barrios de la Ciudad</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Gestión de Presupuestos</title>
+    <link rel="stylesheet" href="presupuesto.css">
 </head>
 <body>
     <header>
@@ -13,7 +13,7 @@
             <a href="rutas.html">Rutas</a>
 
             <div class="submenu">
-                <a href="#">Eventos públicos </a>
+                <a href="#">Eventos públicos</a>
                 <div class="submenu-content">
                     <a href="crearEvento.html">Crear evento</a>
                     <a href="verEventos.html">Ver eventos</a>
@@ -21,7 +21,7 @@
             </div>
 
             <div class="submenu">
-                <a href="#">Presupuesto </a>
+                <a href="#">Presupuesto</a>
                 <div class="submenu-content">
                     <a href="cargarPresupuesto.html">Cargar presupuesto</a>
                     <a href="gestionarPresupuesto.html">Gestionar presupuesto</a>
@@ -34,20 +34,25 @@
     </header>
 
     <main>
-        <h1>Bienvenido a los Barrios de la Ciudad</h1>
-        <p>
-            En esta sección podés explorar los diferentes barrios de nuestra ciudad, conocer su historia,
-            sus características principales y descubrir qué los hace únicos.
-        </p>
-        <p>
-            Utilizá el menú superior para navegar entre los barrios, rutas, eventos públicos,
-            personal o explorar puntos de interés cercanos.
-        </p>
+        <h1>Gestión de Presupuestos</h1>
+        <div class="presupuesto-container">
+            <section class="presupuesto-general">
+                <h2>Presupuesto General por Barrio</h2>
+                <div class="presupuesto-cards" id="presupuesto-barrios">
+                </div>
+            </section>
+
+            <section class="puntos-interes">
+                <h2>Distribución por Puntos de Interés</h2>
+                <div class="distribucion-cards" id="distribucion-poi">
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer>
         <p>© 2025 Ciudad Digital. Todos los derechos reservados.</p>
-        <p><a href="contacto.html">Contacto</a> | Términos y condiciones</p>
+        <p><a href="contacto.html">Contacto</a></p>
     </footer>
 </body>
 </html>
