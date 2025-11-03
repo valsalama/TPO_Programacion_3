@@ -1,0 +1,210 @@
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #F5F6F8;
+}
+
+/* LOGOS */
+.logo-header {
+    display: block;
+    height: 50px;
+    margin: 0 auto 10px;
+}
+
+.logo-footer {
+    display: block;
+    height: 40px;
+    margin: 10px auto;
+    filter: brightness(0) invert(1);
+}
+
+/* HEADER */
+header {
+    background-color: #2E3A46;
+    color: #F5F6F8;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* NAVIGATION */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+nav a {
+    color: #F5F6F8;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    position: relative;
+}
+
+nav a:hover {
+    background-color: #2E3A46;
+    border-radius: 5px;
+}
+
+/* SUBMENUS */
+.submenu {
+    position: relative;
+}
+
+.submenu-content {
+    display: none;
+    position: absolute;
+    background-color: #2E3A46;
+    min-width: 180px;
+    top: 100%;
+    left: 0;
+    border-radius: 5px;
+    z-index: 9999;
+    padding: 5px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.submenu-content a {
+    display: block;
+    padding: 10px;
+    color: #F5F6F8;
+    text-align: left;
+}
+
+.submenu-content a:hover {
+    background-color: #2E3A46;
+}
+
+.submenu:hover > .submenu-content {
+    display: block;
+}
+
+.submenu > a::after {
+    content: " ▾";
+    font-size: 0.8em;
+}
+
+/* MAIN CONTENT */
+main {
+    flex: 1;
+    padding: 40px;
+    text-align: center;
+}
+
+h1 {
+    color: #2E3A46;
+    margin-bottom: 30px;
+}
+
+/* FORMULARIO CREAR EVENTO */
+form#crear-evento-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #C0C0C0;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+form label {
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+form input, form textarea, form select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #F5F6F8;
+}
+
+form textarea {
+    resize: vertical;
+}
+
+form button {
+    background-color: #2E3A46;
+    color: #F5F6F8;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #2E3A46;
+}
+
+/* FOOTER */
+footer {
+    background-color: #2E3A46;
+    color: #F5F6F8;
+    text-align: center;
+    padding: 20px 10px;
+}
+
+footer a {
+    color: #F5F6F8;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* BACK TO TOP BUTTON */
+.back-to-top {
+    position: fixed;
+    right: 18px;
+    bottom: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #2E3A46;
+    color: #F5F6F8;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 1100;
+    transition: opacity .25s, transform .2s;
+    opacity: .95;
+}
+
+.back-to-top:hover {
+    transform: translateY(-3px);
+    opacity: 1;
+}
+
+/* MEDIA QUERIES 768px */
+@media (max-width: 768px) {
+    nav { flex-direction: row; flex-wrap: wrap; gap: 10px; padding: 5px 0; }
+    form#crear-evento-form { width: calc(100% - 40px); padding: 20px; }
+    main { padding: 20px; }
+}
+
+/* MEDIA QUERIES 480px */
+@media (max-width: 480px) {
+    header { padding: 10px 0; }
+    nav a { padding: 8px 10px; font-size: 0.95em; }
+    .back-to-top { right: 12px; bottom: 16px; width: 40px; height: 40px; font-size: 18px; }
+}
+
+/* SCROLL BEHAVIOR */
+html { scroll-behavior: smooth; }
