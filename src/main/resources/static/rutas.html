@@ -49,6 +49,26 @@
         </form>
 
         <div id="resultado"></div>
+
+
+        <div>
+                <label for="atraccion">Elegir atracción:</label>
+                <select id="atraccion" name="atraccion"></select>
+                <button type="button" id="btn-agregar">Agregar a la lista</button>
+            </div>
+
+            <div>
+                <h3>Atracciones seleccionadas:</h3>
+                <ul id="lista-atracciones"></ul>
+            </div>
+
+            <button type="submit">Calcular ruta</button>
+        
+</form>
+
+<div id="resultado-atracciones"></div>
+
+
     </main>
 
     <footer>
@@ -61,8 +81,9 @@
 
 
 
-    <script>
-        // ==========================
+    <script src="rutas.js"></script>
+  <!--  
+    // ==========================
         // Función para cargar barrios en los selects
         // ==========================
         async function cargarBarrios() {
@@ -137,8 +158,40 @@
         // ==========================
         document.addEventListener("DOMContentLoaded", cargarBarrios);
         document.getElementById("ruta-form").addEventListener("submit", calcularRuta);
-    </script>
 
+
+        // ==========================Atracciones y recorrido==========================
+        async function cargarAtracciones() {
+  const res = await fetch("http://localhost:8080/api/atracciones");
+  const atracciones = await res.json();
+  const cont = document.getElementById("atracciones");
+  atracciones.forEach(a => {
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" value="${a}"> ${a}<br>`;
+    cont.appendChild(label);
+  });
+}
+
+document.getElementById("buscar").addEventListener("click", async () => {
+  const seleccionados = Array.from(document.querySelectorAll('#atracciones input:checked')).map(i => i.value);
+  if (seleccionados.length < 1) {
+    alert("Seleccione al menos una atracción");
+    return;
+  }
+  const metodo = document.getElementById("metodo").value;
+  const res = await fetch("http://localhost:8080/api/recorrido", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ metodo, atracciones: seleccionados })
+  });
+  const data = await res.json();
+  document.getElementById("resultado").innerText =
+    `Recorrido (${data.metodo}): ${data.recorrido.join(" → ")}`;
+});
+
+cargarAtracciones();
+    </script>
+  -->
 
 </body>
 </html>
