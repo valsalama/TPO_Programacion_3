@@ -6,7 +6,7 @@ import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.AuthTokens;
 import java.util.*;
-import org.neo4j.driver.Record; // IMPORTANTE: usa este Record explícito de Neo4j
+import org.neo4j.driver.Record; 
 
 public class Neo4jConnector implements AutoCloseable {
     private final Driver driver;
@@ -46,7 +46,7 @@ public class Neo4jConnector implements AutoCloseable {
             Result result = session.run(query);
 
             while (result.hasNext()) {
-                Record record = result.next(); // Record explícito de Neo4j
+                Record record = result.next(); 
                 String origen = record.get("origen").asString();
                 String destino = record.get("destino").asString();
                 double peso = record.get("peso").asDouble();
