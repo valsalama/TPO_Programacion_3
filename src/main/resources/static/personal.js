@@ -1,26 +1,57 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const personal = [
-        
-    ];
+const API_BASE = "http://localhost:8080/api";
+const tableBody = document.getElementById("personal-body");
+const sortSelect = document.getElementById("sort-select");
+const errorDiv = document.getElementById("error");
 
-    const main = document.querySelector("main");
+function buildUrl() {
+    const sort = sortSelect.value;
+    if (!sort || sort === "nombre") {
+        return `${API_BASE}/personal`;
+    }
+    return `${API_BASE}/personal?sort=${encodeURIComponent(sort)}`;
+}
 
-    const contenedor = document.createElement("div");
-    contenedor.style.maxWidth = "800px";
-    contenedor.style.margin = "20px auto";
-    contenedor.style.display = "flex";
-    contenedor.style.flexDirection = "column";
-    contenedor.style.gap = "15px";
+async function fetchAndRender() {
+    try {
+        const response = await fetch(buildUrl());
+        const data = await response.json();
+        renderTable(data);
+    } catch (err) {
+        console.error("Error al cargar personal:", err);
+        showError("Ocurrió un error al cargar la lista. Reintentá más tarde.");
+    }
+}
 
-    personal.forEach(p => {
-        const div = document.createElement("div");
-        div.style.border = "1px solid #ccc";
-        div.style.borderRadius = "8px";
-        div.style.padding = "15px";
-        div.style.background = "#ffffff";
-        div.innerHTML = `<h3>${p.nombre}</h3><p>${p.cargo}</p><p>Contacto: <a href="mailto:${p.email}">${p.email}</a></p>`;
-        contenedor.appendChild(div);
+function showError(msg) {
+    errorDiv.textContent = msg;
+    errorDiv.style.display = "block";
+}
+
+function renderTable(lista) {
+    tableBody.innerHTML = "";
+
+    if (!lista || lista.length === 0) {
+        showError("No hay registros de personal para mostrar.");
+        return;
+    }
+
+    errorDiv.style.display = "none";
+
+    lista.forEach(per => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${per.legajo}</td>
+            <td>${per.nombreApellido}</td>
+            <td>${per.edad}</td>
+            <td>${per.barrio}</td>
+            <td>${per.sexo}</td>
+            <td>${per.departamento}</td>
+            <td>${per.dni}</td>
+            <td>${per.nacionalidad}</td>
+        `;
+        tableBody.appendChild(row);
     });
+}
 
-    main.appendChild(contenedor);
-});
+document.addEventListener("DOMContentLoaded", fetchAndRender);
+sortSelect.addEventListener("change", fetchAndRender);

@@ -14,7 +14,7 @@ public class DijkstraController {
     private final Neo4jConnector neo4j;
 
     public DijkstraController() {
-        neo4j = new Neo4jConnector("bolt://localhost:7687", "neo4j", "12345678");
+        neo4j = new Neo4jConnector();
     }
 
     @GetMapping("/barrios")

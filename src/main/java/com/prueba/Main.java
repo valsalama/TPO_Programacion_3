@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        try (Neo4jConnector neo4j = new Neo4jConnector("bolt://localhost:7687", "neo4j", "lolachimichu")) {
+        try (Neo4jConnector neo4j = new Neo4jConnector()) {
 
             Map<String, List<Arista>> grafo = neo4j.cargarGrafo();
 

@@ -1,17 +1,26 @@
 package com.prueba.model;
 
+import org.neo4j.driver.AuthTokens;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
-import org.neo4j.driver.AuthTokens;
-import java.util.*;
-import org.neo4j.driver.Record; // IMPORTANTE: usa este Record explícito de Neo4j
+import org.neo4j.driver.SessionConfig;
+import org.neo4j.driver.Record;  // 👈 ESTE IMPORT ES FUNDAMENTAL
+import org.springframework.stereotype.Component;
 
+import java.util.*;
+
+@Component
 public class Neo4jConnector implements AutoCloseable {
+
     private final Driver driver;
 
-    public Neo4jConnector(String uri, String user, String password) {
+    // ✅ Constructor sin parámetros (Spring puede instanciarlo sin errores)
+    public Neo4jConnector() {
+        String uri = "bolt://127.0.0.1:7687";  // ⚠️ Ajustá si usás otro puerto
+        String user = "neo4j";
+        String password = "lolachimichu";              // ⚠️ Cambiá según tu contraseña
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
@@ -20,23 +29,23 @@ public class Neo4jConnector implements AutoCloseable {
         driver.close();
     }
 
-    // Devuelve todos los barrios (para llenar los <select>)
+    // 🔹 Devuelve todos los barrios
     public List<String> getBarrios() {
         List<String> barrios = new ArrayList<>();
-        try (Session session = driver.session()) {
-            Result result = session.run("MATCH (b:Barrio) RETURN b.nombre AS nombre");
+        try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
+            Result result = session.run("MATCH (b:Barrio) RETURN b.nombre AS nombre ORDER BY b.nombre");
             while (result.hasNext()) {
-                Record record = result.next(); // Record aquí es org.neo4j.driver.Record
+                Record record = (Record) result.next();
                 barrios.add(record.get("nombre").asString());
             }
         }
         return barrios;
     }
 
-    // Cargar grafo completo desde Neo4j (para Dijkstra)
+    // 🔹 Cargar grafo completo desde Neo4j (para Dijkstra)
     public Map<String, List<Arista>> cargarGrafo() {
         Map<String, List<Arista>> grafo = new HashMap<>();
-        try (Session session = driver.session()) {
+        try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
             String query = """
                 MATCH (a:Barrio)-[r:LIMITA_CON]->(b:Barrio)
                 WITH a, b, (coalesce(a.peso, 1.0) + coalesce(b.peso, 1.0))/2 AS peso
@@ -46,7 +55,7 @@ public class Neo4jConnector implements AutoCloseable {
             Result result = session.run(query);
 
             while (result.hasNext()) {
-                Record record = result.next(); // Record explícito de Neo4j
+                Record record = result.next();
                 String origen = record.get("origen").asString();
                 String destino = record.get("destino").asString();
                 double peso = record.get("peso").asDouble();
@@ -54,10 +63,29 @@ public class Neo4jConnector implements AutoCloseable {
                 grafo.computeIfAbsent(origen, k -> new ArrayList<>())
                      .add(new Arista(destino, peso));
 
-                // Aseguramos que todos los nodos estén en el grafo incluso sin aristas salientes
                 grafo.putIfAbsent(destino, new ArrayList<>());
             }
         }
         return grafo;
+    }
+
+    // 🔹 Ejecuta un Cypher sin parámetros
+    public List<Map<String, Object>> runQuery(String cypher) {
+        try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
+            Result result = session.run(cypher);
+            List<Map<String, Object>> records = new ArrayList<>();
+            result.stream().forEach(r -> records.add(r.asMap()));
+            return records;
+        }
+    }
+
+    // 🔹 Ejecuta un Cypher con parámetros
+    public List<Map<String, Object>> runQuery(String cypher, Map<String, Object> params) {
+        try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
+            Result result = session.run(cypher, params);
+            List<Map<String, Object>> records = new ArrayList<>();
+            result.stream().forEach(r -> records.add(r.asMap()));
+            return records;
+        }
     }
 }

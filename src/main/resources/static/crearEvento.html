@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
             <a href="rutas.html">Rutas</a>
 
             <div class="submenu">
-                <a href="#">Eventos públicos </a>
+                <a href="#">Eventos públicos</a>
                 <div class="submenu-content">
                     <a href="crearEvento.html">Crear evento</a>
                     <a href="verEventos.html">Ver eventos</a>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="submenu">
-                <a href="#">Presupuesto </a>
+                <a href="#">Presupuesto</a>
                 <div class="submenu-content">
                     <a href="cargarPresupuesto.html">Cargar presupuesto</a>
                     <a href="gestionarPresupuesto.html">Gestionar presupuesto</a>
@@ -49,18 +49,20 @@
             <label for="fecha">Fecha:</label>
             <input type="date" id="fecha" name="fecha" required>
 
-            <label for="hora">Hora:</label>
-            <input type="time" id="hora" name="hora" required>
-
             <label for="barrio">Barrio:</label>
             <select id="barrio" name="barrio" required>
+                <option value="">Seleccione un barrio</option>
+            </select>
+
+            <label for="plaza">Plaza:</label>
+            <select id="plaza" name="plaza" required>
+                <option value="">Seleccione una plaza</option>
             </select>
 
             <button type="submit">Crear evento</button>
         </form>
 
-        <div id="mensaje">
-        </div>
+        <div id="mensaje"></div>
     </main>
 
     <footer>
@@ -68,7 +70,9 @@
         <p>© 2025 Ciudad Digital. Todos los derechos reservados.</p>
         <p><a href="contacto.html">Contacto</a> | Términos y condiciones</p>
     </footer>
+
     <a href="#top" class="back-to-top" aria-label="Volver arriba" title="Volver arriba">↑</a>
+
     <script src="crearEvento.js"></script>
 </body>
 </html>
