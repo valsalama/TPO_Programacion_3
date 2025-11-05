@@ -16,7 +16,7 @@
             <a href="rutas.html">Rutas</a>
 
             <div class="submenu">
-                <a href="#">Eventos públicos </a>
+                <a href="#">Eventos públicos</a>
                 <div class="submenu-content">
                     <a href="crearEvento.html">Crear evento</a>
                     <a href="verEventos.html">Ver eventos</a>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="submenu">
-                <a href="#">Presupuesto </a>
+                <a href="#">Presupuesto</a>
                 <div class="submenu-content">
                     <a href="cargarPresupuesto.html">Cargar presupuesto</a>
                     <a href="gestionarPresupuesto.html">Gestionar presupuesto</a>
@@ -38,14 +38,17 @@
 
     <main>
         <h1>Puntos de Interés de la Ciudad</h1>
-        <p>
-            En esta sección podés explorar los lugares más destacados de nuestra ciudad:
-            plazas, parques, monumentos y museos que podés visitar.
-        </p>
-        <p>
-            Utilizá el menú superior para navegar entre barrios, rutas, eventos públicos,
-            personal o explorar otros puntos de interés cercanos.
-        </p>
+
+        <section id="seleccion-parada">
+            <label for="paradaSelect">Seleccioná una o varias paradas:</label>
+            <select id="paradaSelect" multiple size="10">
+                <option value="">-- Elegí una o varias paradas --</option>
+            </select>
+            <div class="botones">
+                <button id="btnSeleccionar">Seleccionar</button>
+                <button id="btnCalcularRuta">Calcular ruta</button>
+            </div>
+        </section>
 
         <div id="puntos-container"></div>
     </main>
@@ -58,6 +61,92 @@
 
     <a href="#top" class="back-to-top" aria-label="Volver arriba" title="Volver arriba">↑</a>
 
-    <script src="puntoDeInteres.js"></script>
+    <!-- Script directo (ya probado) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const paradaSelect = document.getElementById("paradaSelect");
+            const btnSeleccionar = document.getElementById("btnSeleccionar");
+            const btnCalcularRuta = document.getElementById("btnCalcularRuta");
+            const puntosContainer = document.getElementById("puntos-container");
+
+            async function cargarParadas() {
+                try {
+                    const res = await fetch("http://localhost:8080/paradas/listar");
+                    if (!res.ok) throw new Error("Error al cargar paradas");
+                    const paradas = await res.json();
+
+                    paradaSelect.innerHTML = `<option value="">-- Elegí una o varias paradas --</option>`;
+
+                    paradas.forEach(p => {
+                        const opt = document.createElement("option");
+                        opt.value = p.nombre;
+                        opt.textContent = p.nombre;
+                        paradaSelect.appendChild(opt);
+                    });
+
+                    console.log("Paradas cargadas:", paradas);
+                } catch (err) {
+                    console.error("Error cargando paradas:", err);
+                    alert("No se pudieron cargar las paradas.");
+                }
+            }
+
+            btnSeleccionar.addEventListener("click", () => {
+                const seleccionadas = Array.from(paradaSelect.selectedOptions).map(opt => opt.value);
+
+                if (seleccionadas.length === 0) {
+                    alert("Seleccioná al menos una parada.");
+                    return;
+                }
+
+                puntosContainer.innerHTML = `
+                    <h3>Paradas seleccionadas:</h3>
+                    <ul>
+                        ${seleccionadas.map(p => `<li>${p}</li>`).join("")}
+                    </ul>
+                `;
+            });
+
+            btnCalcularRuta.addEventListener("click", async () => {
+    const seleccionadas = Array.from(paradaSelect.selectedOptions).map(opt => opt.value);
+
+    if (seleccionadas.length < 2) {
+        alert("Seleccioná al menos dos paradas para calcular el orden óptimo.");
+        return;
+    }
+
+    try {
+        const res = await fetch("http://localhost:8080/paradas/orden-optimo", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(seleccionadas)
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        if (data.orden && data.orden.length > 0) {
+            puntosContainer.innerHTML = `
+                <h3>Orden óptimo de recorrido:</h3>
+                <p>${data.orden.join(" → ")}</p>
+            `;
+        } else {
+            puntosContainer.innerHTML = "<p>No se pudo determinar un orden óptimo.</p>";
+        }
+
+    } catch (err) {
+        console.error("Error calculando orden óptimo:", err);
+        alert("Ocurrió un error al calcular el orden óptimo.");
+    }
+});
+
+
+            await cargarParadas();
+        });
+    </script>
 </body>
 </html>
