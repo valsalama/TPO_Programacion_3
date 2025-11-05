@@ -6,7 +6,7 @@ import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
 import org.neo4j.driver.SessionConfig;
-import org.neo4j.driver.Record;  // 👈 ESTE IMPORT ES FUNDAMENTAL
+import org.neo4j.driver.Record;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -16,11 +16,10 @@ public class Neo4jConnector implements AutoCloseable {
 
     private final Driver driver;
 
-    // ✅ Constructor sin parámetros (Spring puede instanciarlo sin errores)
     public Neo4jConnector() {
-        String uri = "bolt://127.0.0.1:7687";  // ⚠️ Ajustá si usás otro puerto
+        String uri = "bolt://127.0.0.1:7687";  // 
         String user = "neo4j";
-        String password = "lolachimichu";              // ⚠️ Cambiá según tu contraseña
+        String password = "lolachimichu";              
         driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
     }
 
@@ -29,7 +28,6 @@ public class Neo4jConnector implements AutoCloseable {
         driver.close();
     }
 
-    // 🔹 Devuelve todos los barrios
     public List<String> getBarrios() {
         List<String> barrios = new ArrayList<>();
         try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
@@ -42,7 +40,6 @@ public class Neo4jConnector implements AutoCloseable {
         return barrios;
     }
 
-    // 🔹 Cargar grafo completo desde Neo4j (para Dijkstra)
     public Map<String, List<Arista>> cargarGrafo() {
         Map<String, List<Arista>> grafo = new HashMap<>();
         try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
@@ -69,7 +66,6 @@ public class Neo4jConnector implements AutoCloseable {
         return grafo;
     }
 
-    // 🔹 Ejecuta un Cypher sin parámetros
     public List<Map<String, Object>> runQuery(String cypher) {
         try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
             Result result = session.run(cypher);
@@ -79,7 +75,6 @@ public class Neo4jConnector implements AutoCloseable {
         }
     }
 
-    // 🔹 Ejecuta un Cypher con parámetros
     public List<Map<String, Object>> runQuery(String cypher, Map<String, Object> params) {
         try (Session session = driver.session(SessionConfig.forDatabase("neo4j"))) {
             Result result = session.run(cypher, params);

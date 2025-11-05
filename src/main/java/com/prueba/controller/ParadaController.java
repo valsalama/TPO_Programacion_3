@@ -20,7 +20,6 @@ public class ParadaController {
         return neo4jConnector.runQuery(cypher);
     }
 
-    // 🔹 NUEVO ENDPOINT BFS
     @PostMapping("/orden-optimo")
     public Map<String, Object> calcularOrdenOptimo(@RequestBody List<String> seleccionadas) {
         Map<String, Object> resultado = new HashMap<>();
@@ -30,34 +29,30 @@ public class ParadaController {
             return resultado;
         }
 
-        // Cargar el grafo desde Neo4j (nodos y conexiones)
         String cypher = "MATCH (a:Parada)-[:CONECTA_A]->(b:Parada) " +
                         "RETURN a.nombre AS origen, b.nombre AS destino";
         List<Map<String, Object>> relaciones = neo4jConnector.runQuery(cypher);
 
-        // Construir el grafo en memoria
         Map<String, List<String>> grafo = new HashMap<>();
         for (Map<String, Object> r : relaciones) {
             String origen = (String) r.get("origen");
             String destino = (String) r.get("destino");
             grafo.computeIfAbsent(origen, k -> new ArrayList<>()).add(destino);
-            grafo.computeIfAbsent(destino, k -> new ArrayList<>()).add(origen); // grafo no dirigido
+            grafo.computeIfAbsent(destino, k -> new ArrayList<>()).add(origen); 
         }
 
-        // BFS
+    
         List<String> orden = bfs(grafo, seleccionadas);
 
         resultado.put("orden", orden);
         return resultado;
     }
 
-    // 🔹 BFS que conecta las paradas seleccionadas
     private List<String> bfs(Map<String, List<String>> grafo, List<String> seleccionadas) {
         Set<String> visitados = new HashSet<>();
         List<String> recorrido = new ArrayList<>();
         Queue<String> cola = new LinkedList<>();
 
-        // Empezamos desde la primera seleccionada
         cola.add(seleccionadas.get(0));
         visitados.add(seleccionadas.get(0));
 
@@ -73,8 +68,6 @@ public class ParadaController {
                 }
             }
         }
-
-        // Filtramos el recorrido solo con las seleccionadas (en el orden encontrado)
         recorrido.retainAll(seleccionadas);
 
         return recorrido;

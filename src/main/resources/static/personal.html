@@ -12,7 +12,6 @@
             <img src="logoCiudadInteligente.png" alt="Logo Ciudad Inteligente" class="logo-header">
         </a>
         <nav>
-            <a href="index.html">Barrios de la ciudad</a>
             <a href="rutas.html">Rutas</a>
 
             <div class="submenu">
@@ -23,13 +22,7 @@
                 </div>
             </div>
 
-            <div class="submenu">
-                <a href="#">Presupuesto</a>
-                <div class="submenu-content">
-                    <a href="cargarPresupuesto.html">Cargar presupuesto</a>
-                    <a href="gestionarPresupuesto.html">Gestionar presupuesto</a>
-                </div>
-            </div>
+            
 
             <a href="personal.html">Personal</a>
             <a href="puntoDeInteres.html">Puntos de interés</a>
@@ -45,10 +38,10 @@
         <section id="controls" aria-label="Controles de visualización">
             <div id="error" style="display:none; color:red; font-weight:bold;"></div>
             <label for="sort-select">Ordenar por:</label>
-            <select id="sort-select">
-    <option value="nombre">Sin ordenar (Neo4j raw)</option>
-    <option value="legajo">Ordenar por legajo (mergeSort)</option>
-    <option value="edad">Ordenar por edad (quickSort)</option>
+    <select id="sort-select">
+    <option value="legajo">Por legajo</option>
+    <option value="edad">Por edad</option>
+    <option value="divideYVenceras">Por nacionalidad y nombre (Divide y vencerás)</option>
 </select>
 
             <button id="refresh-btn" type="button">Refrescar</button>

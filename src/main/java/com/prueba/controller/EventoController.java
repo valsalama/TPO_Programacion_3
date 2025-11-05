@@ -20,9 +20,8 @@ public class EventoController {
     private EventoService eventoService;
 
     @Autowired
-    private Neo4jConnector neo4jConnector; // 🔹 para consultar barrios y plazas en Neo4j
+    private Neo4jConnector neo4jConnector; 
 
-    // ------------------- EXISTENTES -------------------
     @PostMapping("/crear")
     public String crearEvento(@RequestParam String nombre,
                               @RequestParam String barrio,
@@ -35,21 +34,19 @@ public class EventoController {
         return "Evento creado y asignado correctamente.";
     }
 
-    // 🔹 Listar todos los eventos guardados
+    
     @GetMapping
     public List<Evento> listarEventos() {
         return eventoService.getEventos();
     }
-    // ------------------- NUEVOS (para conectar con el front y Neo4j) -------------------
 
-    // 🔹 Listar barrios desde Neo4j
     @GetMapping("/barrios")
     public List<Map<String, Object>> listarBarrios() {
         String query = "MATCH (b:Barrio) RETURN b.nombre AS nombre ORDER BY b.nombre";
         return neo4jConnector.runQuery(query);
     }
 
-    // 🔹 Listar plazas según el barrio seleccionado
+    // Listar plazas según el barrio seleccionado
     @GetMapping("/plazas")
     public List<Map<String, Object>> plazasPorBarrio(@RequestParam String barrio) {
         String query = "MATCH (p:Plaza {barrio: $barrio}) RETURN p.nombre AS nombre ORDER BY p.nombre";

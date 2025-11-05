@@ -61,11 +61,41 @@ public class Personal {
         }
 
         int mid = lista.size() / 2;
-        List<Personal> izquierda = mergeSort(lista.subList(0, mid));
-        List<Personal> derecha = mergeSort(lista.subList(mid, lista.size()));
+        List<Personal> izquierda = mergeSort(new ArrayList<>(lista.subList(0, mid)));
+        List<Personal> derecha = mergeSort(new ArrayList<>(lista.subList(mid, lista.size())));
 
         return merge(izquierda, derecha);
     }
+
+    //divide y vencerás por nacionalidad y nombre 
+    public static List<Personal> divideYVenceras(List<Personal> lista) {
+        if (lista == null || lista.size() <= 1) {
+            return lista;
+        }
+
+        int mitad = lista.size() / 2;
+        List<Personal> izquierda = new ArrayList<>(lista.subList(0, mitad));
+        List<Personal> derecha = new ArrayList<>(lista.subList(mitad, lista.size()));
+
+        izquierda = divideYVenceras(izquierda);
+        derecha = divideYVenceras(derecha);
+
+        List<Personal> combinada = new ArrayList<>();
+        combinada.addAll(izquierda);
+        combinada.addAll(derecha);
+
+
+        combinada.sort((p1, p2) -> {
+            int cmp = p1.nacionalidad.compareToIgnoreCase(p2.nacionalidad);
+            if (cmp == 0) {
+                cmp = p1.nombreApellido.compareToIgnoreCase(p2.nombreApellido);
+            }
+            return cmp;
+        });
+
+        return combinada;
+    }
+
 
     private static List<Personal> merge(List<Personal> izq, List<Personal> der) {
         List<Personal> resultado = new ArrayList<>();

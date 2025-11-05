@@ -15,7 +15,7 @@ public class PlazaController {
     @Autowired
     private Neo4jConnector neo4jConnector;
 
-    // 🔹 Devuelve las plazas de un barrio específico
+    //Devuelve las plazas de un barrio específico
     @GetMapping("/porBarrio")
     public List<Map<String, Object>> plazasPorBarrio(@RequestParam String barrio) {
         String cypher = """

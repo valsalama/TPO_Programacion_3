@@ -5,7 +5,8 @@ const errorDiv = document.getElementById("error");
 
 function buildUrl() {
     const sort = sortSelect.value;
-    if (!sort || sort === "nombre") {
+    console.log("Orden seleccionado:", sort);  // 👈 ver qué devuelve
+    if (!sort || sort === "legajo") {
         return `${API_BASE}/personal`;
     }
     return `${API_BASE}/personal?sort=${encodeURIComponent(sort)}`;

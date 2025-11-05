@@ -13,7 +13,7 @@ import com.prueba.model.Neo4jConnector;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")  // ✅ para Live Server
+@CrossOrigin(origins = "*")
 public class PersonalController {
     
     @Autowired
@@ -28,6 +28,7 @@ public class PersonalController {
     );
 
     List<Personal> lista = new ArrayList<>();
+    List<Personal> listaOrdenada = new ArrayList<>();
     for (Map<String, Object> fila : raw) {
         Object pObj = fila.get("p");
         if (!(pObj instanceof Map)) continue;
@@ -49,16 +50,18 @@ public class PersonalController {
     }
 
 
-
-        // 3️⃣ Ordenar solo si corresponde
-        if ("legajo".equals(sort)) {
-            Personal.mergeSort(lista);
-        } else if ("edad".equals(sort)) {
-            Personal.quickSort(lista, 0, lista.size() - 1);
-        }
-        // ✅ Si es nombre o null → NO ordenamos
-
         
-        return ResponseEntity.ok(lista);
+        if ("legajo".equals(sort)) {
+            listaOrdenada = Personal.mergeSort(new ArrayList<>(lista));
+        } else if ("edad".equals(sort)) {
+            listaOrdenada = Personal.quickSort(new ArrayList<>(lista), 0, lista.size() -1);
+        } else if ("divideYVenceras".equals(sort)){
+            listaOrdenada = Personal.divideYVenceras(new ArrayList<>(lista));
+        }else {
+            return ResponseEntity.ok(lista);
+        }
+
+
+        return ResponseEntity.ok(listaOrdenada);
     }
 }
